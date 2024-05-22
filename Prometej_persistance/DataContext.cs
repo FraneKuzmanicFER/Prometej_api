@@ -8,5 +8,6 @@ namespace Prometej_persistance
         public DataContext(DbContextOptions<DataContext> options) : base(options){}
 
         public DbSet<User> Users { get; set; }
+        public DbSet<PeriodContent> PeriodContents { get; set; }
     }
 }

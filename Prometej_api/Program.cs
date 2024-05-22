@@ -29,16 +29,19 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(UserService).Assembly);
+builder.Services.AddAutoMapper(typeof(PeriodService).Assembly);
 
 #region Repo DI
 
 builder.Services.AddTransient<IRepository<User>, Repository<User>>();
+builder.Services.AddTransient<IRepository<PeriodContent>, Repository<PeriodContent>>();
 
 #endregion Repo DI
 
 #region Service DI
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPeriodService, PeriodService>();
 
 #endregion Service DI
 
