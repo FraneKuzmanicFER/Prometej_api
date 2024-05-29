@@ -9,5 +9,8 @@ namespace Prometej_persistance
 
         public DbSet<User> Users { get; set; }
         public DbSet<PeriodContent> PeriodContents { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
+
     }
 }

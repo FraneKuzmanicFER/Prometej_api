@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prometej_persistance;
@@ -11,9 +12,11 @@ using Prometej_persistance;
 namespace Prometej_persistance.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240523154545_added-quiz-entity")]
+    partial class addedquizentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,54 +43,6 @@ namespace Prometej_persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PeriodContents");
-                });
-
-            modelBuilder.Entity("Prometej_core.Models.efModels.Question", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CorrectAnswer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ExploreMore")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstAnswer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FourthAnswer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("HintText")
-                        .HasColumnType("text");
-
-                    b.Property<string>("QuestionTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("QuizId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SecondAnswer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ThirdAnswer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Prometej_core.Models.efModels.Quiz", b =>
@@ -151,17 +106,6 @@ namespace Prometej_persistance.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Prometej_core.Models.efModels.Question", b =>
-                {
-                    b.HasOne("Prometej_core.Models.efModels.Quiz", "Quiz")
-                        .WithMany("Questions")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Quiz");
-                });
-
             modelBuilder.Entity("Prometej_core.Models.efModels.Quiz", b =>
                 {
                     b.HasOne("Prometej_core.Models.efModels.User", "Creator")
@@ -171,11 +115,6 @@ namespace Prometej_persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("Prometej_core.Models.efModels.Quiz", b =>
-                {
-                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

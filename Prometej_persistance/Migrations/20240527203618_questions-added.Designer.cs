@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prometej_persistance;
@@ -11,9 +12,11 @@ using Prometej_persistance;
 namespace Prometej_persistance.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240527203618_questions-added")]
+    partial class questionsadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,6 +58,7 @@ namespace Prometej_persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ExploreMore")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FirstAnswer")
@@ -66,6 +70,7 @@ namespace Prometej_persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("HintText")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("QuestionTitle")
