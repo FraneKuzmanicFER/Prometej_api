@@ -35,6 +35,19 @@ namespace Prometej_api.Controllers
             }
         }
 
+        [HttpGet("search/{query}")]
+        public IActionResult SearchQuizzes(string query)
+        {
+            try
+            {
+                return StatusCode(201, _quizService.searchQuizzes(query));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("getAllUserQuizzes/{id}")]
         public IActionResult GetAllUserQuizzes(int id)
         {
@@ -54,6 +67,19 @@ namespace Prometej_api.Controllers
             try
             {
                 return StatusCode(201, _quizService.GetQuiz(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getByCode/{quizCode}")]
+        public IActionResult GetQuizByCode(int quizCode)
+        {
+            try
+            {
+                return StatusCode(201, _quizService.GetQuizByCode(quizCode));
             }
             catch (Exception ex)
             {

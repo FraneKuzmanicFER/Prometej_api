@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace Prometej_core.Services.Implementations
 {
@@ -33,6 +34,63 @@ namespace Prometej_core.Services.Implementations
             PeriodContentViewModel periodViewModel = _mapper.Map<PeriodContentViewModel>(periodEntity);
 
             return periodViewModel;
+        }
+
+        public List<PeriodSearchContentViewModel> SearchPeriodContent(string query)
+        {
+            List<PeriodSearchContentViewModel> searchResults = new List<PeriodSearchContentViewModel>();
+
+            var periodEntities = _periodRepository.ReadAll().ToList();
+            List<PeriodContentViewModel> periodViewModels = _mapper.Map<List<PeriodContentViewModel>>(periodEntities);
+
+            foreach (PeriodContentViewModel periodContent in periodViewModels)
+            {
+                if (periodContent.Content.Contains(query))
+                {
+                    string searchContent = ConstructSearchContent(periodContent.Content, query);
+
+                    PeriodSearchContentViewModel searchResult = new PeriodSearchContentViewModel
+                    {
+                        PeriodId = periodContent.PeriodId,
+                        SearchContent = searchContent
+                    };
+
+                    searchResults.Add(searchResult);
+                }
+
+            }
+
+                return searchResults;
+
+        }
+
+        public string ConstructSearchContent(string content, string query)
+        {
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(content);
+
+            // Find the paragraph (<p>) tag containing the query
+            HtmlNode paragraphNode = htmlDoc.DocumentNode.SelectSingleNode($"//p[contains(text(), '{query}')]");
+
+            if (paragraphNode != null)
+            {
+                // Find the closest preceding h2 tag
+                HtmlNode h2Tag = paragraphNode.SelectSingleNode("preceding-sibling::h2");
+
+                if (h2Tag != null)
+                {
+                    // Return the outer HTML of both the h2 tag and the paragraph
+                    return h2Tag.OuterHtml + paragraphNode.OuterHtml;
+                }
+                else
+                {
+                    // If no preceding h2 tag is found, return just the outer HTML of the paragraph
+                    return paragraphNode.OuterHtml;
+                }
+            }
+
+            // If the paragraph containing the query is not found, return an empty string
+            return string.Empty;
         }
 
         public int UpdatePeriodContent(PeriodContentEditRequest period)

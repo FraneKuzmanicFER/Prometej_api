@@ -33,6 +33,19 @@ namespace Prometej_api.Controllers
             }
         }
 
+        [HttpGet("content/search/{query}")]
+        public IActionResult SearchPeriodContent(string query)
+        {
+            try
+            {
+                return StatusCode(201, _periodService.SearchPeriodContent(query));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("content")]
         public IActionResult EditPeriodContent(PeriodContentEditRequest model)
         {
