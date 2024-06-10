@@ -22,6 +22,37 @@ namespace Prometej_persistance.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Prometej_core.Models.efModels.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnswerText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CorrectAnswer")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuizGameId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("QuizGameId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("Prometej_core.Models.efModels.PeriodContent", b =>
                 {
                     b.Property<int>("Id")
@@ -118,6 +149,39 @@ namespace Prometej_persistance.Migrations
                     b.ToTable("Quizzes");
                 });
 
+            modelBuilder.Entity("Prometej_core.Models.efModels.QuizGame", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DatePlayed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizGames");
+                });
+
             modelBuilder.Entity("Prometej_core.Models.efModels.User", b =>
                 {
                     b.Property<int>("Id")
@@ -151,6 +215,25 @@ namespace Prometej_persistance.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Prometej_core.Models.efModels.Answer", b =>
+                {
+                    b.HasOne("Prometej_core.Models.efModels.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prometej_core.Models.efModels.QuizGame", "QuizGame")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuizGameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("QuizGame");
+                });
+
             modelBuilder.Entity("Prometej_core.Models.efModels.Question", b =>
                 {
                     b.HasOne("Prometej_core.Models.efModels.Quiz", "Quiz")
@@ -173,9 +256,33 @@ namespace Prometej_persistance.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("Prometej_core.Models.efModels.QuizGame", b =>
+                {
+                    b.HasOne("Prometej_core.Models.efModels.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prometej_core.Models.efModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Prometej_core.Models.efModels.Quiz", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Prometej_core.Models.efModels.QuizGame", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }
