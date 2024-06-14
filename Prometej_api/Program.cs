@@ -29,16 +29,25 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(UserService).Assembly);
+builder.Services.AddAutoMapper(typeof(PeriodService).Assembly);
+builder.Services.AddAutoMapper(typeof(QuizService).Assembly);
 
 #region Repo DI
 
 builder.Services.AddTransient<IRepository<User>, Repository<User>>();
+builder.Services.AddTransient<IRepository<PeriodContent>, Repository<PeriodContent>>();
+builder.Services.AddTransient<IRepository<Quiz>, Repository<Quiz>>();
+builder.Services.AddTransient<IRepository<Question>, Repository<Question>>();
+builder.Services.AddTransient<IRepository<Answer>, Repository<Answer>>();
+builder.Services.AddTransient<IRepository<QuizGame>, Repository<QuizGame>>();
 
 #endregion Repo DI
 
 #region Service DI
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPeriodService, PeriodService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 #endregion Service DI
 
